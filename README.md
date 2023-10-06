@@ -1,4 +1,4 @@
-# Aviasales Tool front-end-test-suite
+# Aviasales front-end-test-suite
 
 This is the test project for the front end of Aviasales.
 
