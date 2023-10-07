@@ -43,8 +43,8 @@ exports.SearchPage = class SearchPage extends CommonPageElements  {
     }
 
     async checkNewSearchPageisOpen(){
-        await this.page.waitForLoadState("load");
-        (await this.page.title()).includes('New York → Berlin')
+        await this.page.waitForLoadState("load", {timeout:10000});
+        (await this.page.title()).match('New York → Berlin, 30.10.23 - Aviasales.com')
     }
     
     async checkValuesOnFilterForm(expectedFromInputValue, expectedToInputValue, expectedDepartedDate, expectedReturnedDate, expectedPassengerAndClass) {
