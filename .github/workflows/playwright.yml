@@ -1,7 +1,7 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main ]
 jobs:
   test:
     timeout-minutes: 60
@@ -23,3 +23,10 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+schedules:
+- cron: "0 3 * * 1-5"
+  displayName: Automation Nightly Run
+  branches:
+    include:
+    - main
+  always: true
