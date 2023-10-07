@@ -1,18 +1,45 @@
 const { expect } = require('@playwright/test');
 const { HomePage } = require('./HomePage');
+const { text } = require('stream/consumers');
+const { CommonPageElements } = require('./CommonPageElements');
 
-exports.SearchPage = class SearchPage  {
+exports.SearchPage = class SearchPage extends CommonPageElements  {
    
     /**
      * @param {import('@playwright/test').Page} page
      */
     constructor(page) {
-        this.page = page;
-        this.fromInputField = page.locator('input#origin.autocomplete__input');
-        this.toInputField = page.locator('input#destination.autocomplete__input');
+        super(page);
+        this.page= page;
         this.currentDepartedCalendarDate = page.locator('[data-test-id="departure-date-input"]');
         this.currentReturnedCalendarDate = page.locator('[data-test-id="return-date-input"]');
         this.currentPassengerAndClassLabel = page.locator('[data-test-id="passengers-field"]');
+        this.ticketPriceValue = page.locator('div.ticket-desktop__side-content > div > div.ticket-desktop__price');
+        this.showMoreTicketsButton = page.locator ('button.show-more-tickets__button');
+        this.loadSpinnerForShowMoreTicketsButton = page.locator(' svg > circle.h__xYftpkyUVALid3ylFA8M');
+        this.loadSpinnerForSearchPage = page.locator('svg.spinner__svg');
+        this.loadSpinnerForStripes =page.locator('div.loader__stripes');
+        this.cheapestWithConvenientLayoverLabel = page.locator('span',{hasText:"Cheapest with a convenient layover"});
+    }   
+
+
+    async displayAllTickets(){
+        while(true){
+            try{
+                await expect(this.loadSpinnerForSearchPage).not.toBeVisible({timeout:20000});
+                await expect(this.loadSpinnerForStripes).not.toBeDisabled({timeout:20000});
+                await this.page.waitForLoadState("load", {timeout:20000});
+                await this.showMoreTicketsButton.isVisible({timeout:20000});
+                await this.showMoreTicketsButton.isEnabled({timeout:20000});
+                await expect(this.loadSpinnerForShowMoreTicketsButton).not.toBeVisible({timeout:20000});
+                await this.showMoreTicketsButton.click({timeout:20000});
+                await this.page.waitForLoadState("load", {timeout:20000});
+            }catch(error){
+                console.log('Button disappeared', error);
+                break;
+            }
+        }
+
     }
 
     async checkNewSearchPageisOpen(){
@@ -29,7 +56,7 @@ exports.SearchPage = class SearchPage  {
         } else {
             await expect(this.currentReturnedCalendarDate).toHaveValue(expectedReturnedDate);
         }
-        await expect(this.currentPassengerAndClassLabel).toContainText(expectedPassengerAndClass)
+        await expect(this.currentPassengerAndClassLabel).toContainText(expectedPassengerAndClass);
     }
     
 };
