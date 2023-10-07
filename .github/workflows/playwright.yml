@@ -23,7 +23,7 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
-schedules:
+schedule:
 - cron: "0 3 * * 1-5"
   displayName: Automation Nightly Run
   branches:
