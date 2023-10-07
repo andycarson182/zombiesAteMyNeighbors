@@ -15,7 +15,7 @@ test('Verify the user is able to do a ticket search', async ({ page, context }) 
   await homePage.enterFromField('John F. Kennedy International Airport');
   await homePage.enterToField('Berlin');
   await homePage.expandCalendarModal();
-  await homePage.selectCalendarDate('2023-11', "30"),
+  await homePage.selectCalendarDate('2023-10', "30"),
   await homePage.expandPassengetAndClassDropdownMenu();
   await homePage.selectPassengerTypeAndAddPassengers('Adults', 2);
   await homePage.selectPassengerClass('Economy');
