@@ -17,7 +17,7 @@ test.describe('Test the Aviasales ticket search functionality', () => {
     await homePage.checkNightBackgroundIsEnabled(true);
     await homePage.enterFromField('John F. Kennedy International Airport');
     await homePage.enterToField('Berlin');
-    await homePage.selectCalendarDate('2023-11',"30");
+    await homePage.selectCalendarDate('2023-10',"30");
     await homePage.selectPassengerTypeAndAddPassengers('Adults', 2);
     await commonPageElements.clickSearchFlightsButton();
     await searchPage.checkNewSearchPageisOpen();
