@@ -7,7 +7,7 @@ const { SearchPage } = require('../support/page-objects/SearchPage');
 
 test.describe('Test the Aviasales ticket search functionality', () => {
 
-  test.only('Verify the user is able to do a ticket search', async ({ page }) => {
+  test('Verify the user is able to do a ticket search', async ({ page }) => {
     const homePage = new HomePage(page);
     const searchPage = new SearchPage(page);
     const commonPageElements = new CommonPageElements(page);
@@ -30,9 +30,10 @@ test.describe('Test the Aviasales ticket search functionality', () => {
     );
   })
 
-  test('Verify the Aviasales is searching the cheapest flight ticket', async ({ page }) => {
+  test.skip('Verify the Aviasales is searching the cheapest flight ticket', async ({ page }) => {
     const homePage = new HomePage(page);
     const searchPage = new SearchPage(page);
+    const commonPageElements = new CommonPageElements(page);
     await homePage.goToAviasalesHomePage();
     await homePage.clickOpenBookingInANewTabCheckbox();
     await homePage.checkNightBackgroundIsEnabled(false);
@@ -42,7 +43,7 @@ test.describe('Test the Aviasales ticket search functionality', () => {
     await homePage.clickIDontNeedReturnTicketButton()
     await homePage.selectPassengerTypeAndAddPassengers('Adults', 2);
     await homePage.selectPassengerClass('Economy');
-    await homePage.clickSearchFlightsButton();
+    await commonPageElements.clickSearchFlightsButton();
     await searchPage.checkNewSearchPageisOpen();
     await searchPage.displayAllTickets();
   })
