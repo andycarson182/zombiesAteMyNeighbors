@@ -1,62 +1,47 @@
 const { expect } = require('@playwright/test');
-const { HomePage } = require('./HomePage');
-const { text } = require('stream/consumers');
 const { CommonPageElements } = require('./CommonPageElements');
 
-exports.SearchPage = class SearchPage extends CommonPageElements  {
-   
+const { chromium } = require('playwright');
+exports.SearchPage = class SearchPage extends CommonPageElements {
+
     /**
      * @param {import('@playwright/test').Page} page
      */
-    constructor(page) {
-        super(page);
-        this.page= page;
-        this.currentDepartedCalendarDate = page.locator('[data-test-id="departure-date-input"]');
-        this.currentReturnedCalendarDate = page.locator('[data-test-id="return-date-input"]');
-        this.currentPassengerAndClassLabel = page.locator('[data-test-id="passengers-field"]');
-        this.ticketPriceValue = page.locator('div.ticket-desktop__side-content > div > div.ticket-desktop__price');
-        this.showMoreTicketsButton = page.locator ('button.show-more-tickets__button');
-        this.loadSpinnerForShowMoreTicketsButton = page.locator(' svg > circle.h__xYftpkyUVALid3ylFA8M');
-        this.loadSpinnerForSearchPage = page.locator('svg.spinner__svg');
-        this.loadSpinnerForStripes =page.locator('div.loader__stripes');
-        this.cheapestWithConvenientLayoverLabel = page.locator('span',{hasText:"Cheapest with a convenient layover"});
-    }   
 
-
-    async displayAllTickets(){
-        while(true){
-            try{
-                await expect(this.loadSpinnerForSearchPage).not.toBeVisible({timeout:20000});
-                await expect(this.loadSpinnerForStripes).not.toBeDisabled({timeout:20000});
-                await this.page.waitForLoadState("load", {timeout:20000});
-                await this.showMoreTicketsButton.isVisible({timeout:20000});
-                await this.showMoreTicketsButton.isEnabled({timeout:20000});
-                await expect(this.loadSpinnerForShowMoreTicketsButton).not.toBeVisible({timeout:20000});
-                await this.showMoreTicketsButton.click({timeout:20000});
-                await this.page.waitForLoadState("load", {timeout:20000});
-            }catch(error){
-                console.log('Button disappeared', error);
-                break;
-            }
-        }
-
+    async checkNewSearchPageisOpen() {
+        //await this.page.waitForLoadState("load", { timeout: 10000 });
+        const browser = await chromium.launch();
+        const browserPage = await browser.newPage();
+        const currentUrl = await this.page.url();
+        await expect(currentUrl).toContain('https://www.aviasales.com/search/');
+        await expect(this.cheapestLabel).toBeVisible({ timeout: 30000 });
+        await browserPage.waitForLoadState('domcontentloaded');
+       
     }
 
-    async checkNewSearchPageisOpen(){
-        await this.page.waitForLoadState("load", {timeout:10000});
-        (await this.page.title()).match('New York → Berlin, 30.10.23 - Aviasales.com')
+    async getPassengerAndClassLabelFormatted() {
+        // Select an element with the text you want to retrieve
+        const passengerCount = await this.page.locator('div.avia-form__field.--passengers > div > div > div:nth-child(2)')
+        const passengerClass = await this.page.locator('div.avia-form__field.--passengers > div > div > div:nth-child(3)')
+        // Get the text content of the selected element
+        const passengerCountLabel = await passengerCount.textContent();
+        const passengerClassLabel = await passengerClass.textContent()
+        //Join the parts with a space in between
+        const resultString = `${passengerCountLabel} ${passengerClassLabel}`
+        return resultString
     }
-    
+
     async checkValuesOnFilterForm(expectedFromInputValue, expectedToInputValue, expectedDepartedDate, expectedReturnedDate, expectedPassengerAndClass) {
-        await expect(this.fromInputField).toHaveValue(expectedFromInputValue);
-        await expect(this.toInputField).toHaveValue(expectedToInputValue);
-        await expect(this.currentDepartedCalendarDate).toHaveValue(expectedDepartedDate);
+        await expect(this.originField).toHaveValue(expectedFromInputValue);
+        await expect(this.destinationField).toHaveValue(expectedToInputValue);
+        await expect(this.departureDateField).toHaveValue(expectedDepartedDate);
         if (expectedReturnedDate == null) {
-            await expect(this.currentReturnedCalendarDate).toHaveValue('');
+            await expect(this.returnDateField).toHaveValue('');
         } else {
-            await expect(this.currentReturnedCalendarDate).toHaveValue(expectedReturnedDate);
+            await expect(this.returnDateField).toHaveValue(expectedReturnedDate);
         }
-        await expect(this.currentPassengerAndClassLabel).toContainText(expectedPassengerAndClass);
+        const formattedExpectedPassengerAndClassLabel = await this.getPassengerAndClassLabelFormatted()
+           await expect(formattedExpectedPassengerAndClassLabel).toEqual(expectedPassengerAndClass);
     }
-    
+
 };
