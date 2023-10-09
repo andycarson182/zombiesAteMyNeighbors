@@ -40,7 +40,6 @@ exports.HomePage = class HomePage extends CommonPageElements {
         await this.destinationField.press("Backspace");
         await this.destinationField.fill(destination);
         await this.autocompleteSuggestion.first().click();
-
     }
 
     async expandCalendarModal() {
@@ -55,7 +54,6 @@ exports.HomePage = class HomePage extends CommonPageElements {
                 contentType: 'application/json'
             });
         });
-
         await this.page.selectOption('div:nth-child(1) > div.calendar-caption > div > select', fromMonth);
         await this.calendarDayDateFrom.getByText(date).click();
 

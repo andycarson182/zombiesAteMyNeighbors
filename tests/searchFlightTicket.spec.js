@@ -18,7 +18,7 @@
       await commonPageElements.checkNightBackgroundIsEnabled(true);
       await homePage.fillOriginField('Kennedy int');
       await homePage.fillDestinationField('Berlin');
-      await homePage.selectCalendarDate('November', "30");
+      await homePage.selectCalendarDate('October', "30");
       await homePage.clickIDontNeedReturnTicketButton();
       await homePage.selectPassengerTypeAndAddPassengers('Adults', 2);
       await commonPageElements.clickSearchFlightsButton();
