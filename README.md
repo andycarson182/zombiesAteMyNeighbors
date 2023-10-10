@@ -8,10 +8,11 @@ _Prerequisite: You'll need to install NPM and node.js on your machine to install
 
 1. Clone this project to your local machine.
 2. Open a terminal and navigate to the root of the project. Once there, run the command `npm install` and wait for all of the dependencies to download and install.
-3. Get started by installing Playwright using`npm init playwright@latest`.
+3. Get started by installing Playwright using `npm init playwright@latest`.
 4. Sill on the root of the project, and run the command `npx playwright test --ui`. This will open Playwright in GUI mode. If it is the first time that you open Playwright, there are some setup actions that will take place, so the first time will always take longer.
 5. Once you have the Playwright GUI window open, you can start to run all tests by clicking the play button that is on the top left of the window.
-![Screen Shot 2023-10-08 at 2 41 18 PM](https://github.com/andycarson182/zombiesAteMyNeighbors/assets/25748942/b87f5c63-d56b-401d-bb2d-fb5091b416b5)
+![image](https://github.com/andycarson182/zombiesAteMyNeighbors/assets/25748942/8f5792a6-c6cf-4228-a37b-6d0d6da22e0f)
+
 
 
 
